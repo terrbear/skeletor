@@ -53,6 +53,8 @@ after_bundle do
 
   run "ln -s `pwd` ~/.pow/"
 
+  run "which mina && mina init"
+
   git :init
   git add: "."
   git commit: "-a -m 'Initial commit'"
