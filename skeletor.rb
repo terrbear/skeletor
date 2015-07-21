@@ -4,6 +4,9 @@ def template_file(filename)
   File.read(File.join(File.dirname(__FILE__), "templates", filename))
 end
 
+skip_devise = ENV['skip_devise']
+skip_aa = ENV['skip_aa']
+
 gem_group :development, :test do
   gem 'annotate', '~> 2.6.6'
   
@@ -13,10 +16,10 @@ gem_group :development, :test do
   gem "mail_safe"
 end
 
-gem 'devise', :git => 'https://github.com/plataformatec/devise.git'
-gem 'activeadmin', github: 'activeadmin'
+gem 'devise', :git => 'https://github.com/plataformatec/devise.git' unless skip_devise
+gem 'activeadmin', github: 'activeadmin' unless skip_aa
 
-gem "therubyracer"
+gem "therubyracer", platform: :ruby
 gem "less-rails"
 gem "twitter-bootstrap-rails"
 
@@ -27,8 +30,8 @@ environment "config.action_mailer.default_url_options = { host: 'localhost', por
 route "root to: 'static#index'"
 
 after_bundle do
-  generate 'devise:views'
-  generate 'active_admin:install', 'User'
+  generate 'devise:views' unless skip_devise
+  generate 'active_admin:install', 'User' unless skip_aa
   generate 'rspec:install'
   generate :controller, "static"
 
